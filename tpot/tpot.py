@@ -26,6 +26,7 @@ import inspect
 import sys
 from functools import partial
 from collections import Counter
+from itertools import compress
 
 import numpy as np
 import pandas as pd
@@ -630,13 +631,13 @@ class TPOT(object):
         # Mask filter
         if set(self.expert_source[ekf_index]) in [set([True, False]), set([True]), set([False])]:
             ekf_source = np.array(self.expert_source[ekf_index])
-            ekf_subset = list(input_df.drop(self.non_feature_columns, axis=1).columns.values[ekf_source]) + self.non_feature_columns
+            ekf_subset = list(compress(input_df.drop(self.non_feature_columns, axis=1).columns.values, ekf_source)) + self.non_feature_columns
         # Feature importance filter
         else:
             # Assume higher feature importance score means it's a better feature
             ekf_source = np.argsort(self.expert_source[ekf_index])[::-1]
             ekf_source = ekf_source[:k_best]
-            ekf_subset = list(input_df.drop(self.non_feature_columns, axis=1).columns.values[ekf_source]) + self.non_feature_columns
+            ekf_subset = list(input_df.columns.values[ekf_source]) + self.non_feature_columns
 
         return input_df.loc[:, ekf_subset].copy()
 

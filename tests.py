@@ -9,6 +9,7 @@ from tpot.decorators import _gp_new_generation
 import pandas as pd
 import numpy as np
 from collections import Counter
+from itertools import compress
 import warnings
 import inspect
 import hashlib
@@ -41,6 +42,11 @@ testing_data['group'] = 'testing'
 training_testing_data = pd.concat([training_data, testing_data])
 most_frequent_class = Counter(training_classes).most_common(1)[0][0]
 training_testing_data['guess'] = most_frequent_class
+
+expert_source = [[1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, \
+1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, \
+0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 1], np.random.rand(64)]
+
 
 for column in training_testing_data.columns.values:
     if type(column) != str:
@@ -351,6 +357,40 @@ def test_select_kbest_4():
     mask_cols = list(training_features.iloc[:, mask].columns) + non_feature_columns
 
     assert np.array_equal(tpot_obj._select_kbest(training_testing_data, 42), training_testing_data[mask_cols])
+
+def test_ekf_1():
+    """Ensure that the expert knowledge provided mask chooses the right subset of input data to train"""
+    tpot_obj = TPOT()
+    tpot_obj.expert_source = expert_source
+    non_feature_columns = ['class', 'group', 'guess']
+
+    ekf_index = 0
+    ekf_source_test = np.array(tpot_obj.expert_source[ekf_index])
+    ekf_subset_test = list(compress(training_testing_data.columns.values, ekf_source_test))
+
+    ekf_subset_array = training_testing_data.ix[:, ekf_subset_test].copy()
+    ekf_subset_array = pd.concat([ekf_subset_array, training_testing_data[non_feature_columns]], axis=1)
+
+    assert np.array_equal(tpot_obj._ekf(training_testing_data, ekf_index, k_best=10), ekf_subset_array)
+
+def test_ekf_2():
+    """ Ensure that the expert knowledge provided subset chooses the right subset of input data to train"""
+    tpot_obj = TPOT()
+    tpot_obj.expert_source = expert_source
+    non_feature_columns = ['class', 'group', 'guess']
+
+    ekf_index = 1
+    k_best = 5
+
+    ekf_source_test = np.argsort(expert_source[ekf_index])[::-1][:]
+    ekf_source_test = ekf_source_test[:k_best]
+
+    # ekf_subset_test = list(training_ekf_features[:, ekf_source_test])
+    ekf_subset_test = list(training_testing_data.columns.values[ekf_source_test])
+    ekf_subset_array = training_testing_data.loc[:, ekf_subset_test].copy()
+    ekf_subset_array = pd.concat([ekf_subset_array, training_testing_data[non_feature_columns]], axis=1)
+
+    assert np.array_equal(tpot_obj._ekf(training_testing_data, ekf_index=1, k_best=5), ekf_subset_array)
 
 
 def test_gp_new_generation():
