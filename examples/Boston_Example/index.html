@@ -8,7 +8,7 @@
   
   <meta name="author" content="Randal S. Olson">
   
-  <title>IRIS Example - TPOT</title>
+  <title>Boston Example - TPOT</title>
   
 
   <link rel="shortcut icon" href="../../img/favicon.ico">
@@ -23,9 +23,9 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "IRIS Example";
-    var mkdocs_page_input_path = "examples/IRIS_Example.md";
-    var mkdocs_page_url = "/examples/IRIS_Example/";
+    var mkdocs_page_name = "Boston Example";
+    var mkdocs_page_input_path = "examples/Boston_Example.md";
+    var mkdocs_page_url = "/examples/Boston_Example/";
   </script>
   
   <script src="../../js/jquery-2.1.1.min.js"></script>
@@ -88,19 +88,19 @@
 
         
             
-    <li class="toctree-l1 current">
-        <a class="current" href="./">IRIS Example</a>
-        
-            <ul>
-            
-            </ul>
+    <li class="toctree-l1 ">
+        <a class="" href="../IRIS_Example/">IRIS Example</a>
         
     </li>
 
         
             
-    <li class="toctree-l1 ">
-        <a class="" href="../Boston_Example/">Boston Example</a>
+    <li class="toctree-l1 current">
+        <a class="current" href="./">Boston Example</a>
+        
+            <ul>
+            
+            </ul>
         
     </li>
 
@@ -169,7 +169,7 @@
         
       
     
-    <li>IRIS Example</li>
+    <li>Boston Example</li>
     <li class="wy-breadcrumbs-aside">
       
         
@@ -183,42 +183,40 @@
           <div role="main">
             <div class="section">
               
-                <p>The following code illustrates the usage of TPOT with the IRIS data set.</p>
-<pre><code class="python">from tpot import TPOTClassifier
-from sklearn.datasets import load_iris
+                <p>The following code illustrates the usage of TPOT with the Boston house prices data set.</p>
+<pre><code class="python">from tpot import TPOTRegressor
+from sklearn.datasets import load_boston
 from sklearn.cross_validation import train_test_split
-import numpy as np
 
-iris = load_iris()
-X_train, X_test, y_train, y_test = train_test_split(iris.data.astype(np.float64),
-    iris.target.astype(np.float64), train_size=0.75, test_size=0.25)
+digits = load_boston()
+X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target,
+                                                    train_size=0.75, test_size=0.25)
 
-tpot = TPOTClassifier(generations=5, population_size=20, verbosity=2)
+tpot = TPOTRegressor(generations=5, population_size=20, verbosity=2)
 tpot.fit(X_train, y_train)
 print(tpot.score(X_test, y_test))
-tpot.export('tpot_iris_pipeline.py')
+tpot.export('tpot_boston_pipeline.py')
 </code></pre>
 
-<p>Running this code should discover a pipeline that achieves ~96% testing accuracy.</p>
+<p>Running this code should discover a pipeline that achieves about 12.77 mean squared error (MSE).</p>
 <p>For details on how the <code>fit()</code>, <code>score()</code> and <code>export()</code> functions work, see the <a href="../../using/">usage documentation</a>.</p>
-<p>After running the above code, the corresponding Python code should be exported to the <code>tpot_iris_pipeline.py</code> file and look similar to the following:</p>
+<p>After running the above code, the corresponding Python code should be exported to the <code>tpot_boston_pipeline.py</code> file and look similar to the following:</p>
 <pre><code class="python">import numpy as np
 
 from sklearn.cross_validation import train_test_split
-from sklearn.ensemble import VotingClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.pipeline import make_pipeline, make_union
-from sklearn.preprocessing import FunctionTransformer, PolynomialFeatures
+from sklearn.ensemble import ExtraTreesRegressor
+from sklearn.pipeline import make_pipeline
 
-# NOTE: Make sure that the class is labeled 'class' in the data file
+# NOTE: Make sure that the target is labeled 'class' in the data file
 tpot_data = np.recfromcsv('PATH/TO/DATA/FILE', sep='COLUMN_SEPARATOR', dtype=np.float64)
-features = np.delete(tpot_data.view(np.float64).reshape(tpot_data.size, -1), tpot_data.dtype.names.index('class'), axis=1)
+features = np.delete(tpot_data.view(np.float64).reshape(tpot_data.size, -1),
+                     tpot_data.dtype.names.index('class'), axis=1)
+
 training_features, testing_features, training_classes, testing_classes = \
     train_test_split(features, tpot_data['class'], random_state=42)
 
 exported_pipeline = make_pipeline(
-    PolynomialFeatures(degree=2, include_bias=False, interaction_only=False),
-    LogisticRegression(C=0.9, dual=False, penalty=&quot;l2&quot;)
+    ExtraTreesRegressor(max_features=0.76, n_estimators=500)
 )
 
 exported_pipeline.fit(training_features, training_classes)
@@ -231,10 +229,10 @@ results = exported_pipeline.predict(testing_features)
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../Boston_Example/" class="btn btn-neutral float-right" title="Boston Example">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../Titanic_Kaggle_Example/" class="btn btn-neutral float-right" title="Titanic Kaggle Example">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../MNIST_Example/" class="btn btn-neutral" title="MNIST Example"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../IRIS_Example/" class="btn btn-neutral" title="IRIS Example"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -264,10 +262,10 @@ results = exported_pipeline.predict(testing_features)
           <a href="https://github.com/rhiever/tpot" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
       
       
-        <span><a href="../MNIST_Example/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+        <span><a href="../IRIS_Example/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../Boston_Example/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../Titanic_Kaggle_Example/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>

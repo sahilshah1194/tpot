@@ -41,6 +41,11 @@
             "title": "IRIS Example"
         },
         {
+            "location": "/examples/Boston_Example/",
+            "text": "The following code illustrates the usage of TPOT with the Boston house prices data set.\n\n\nfrom tpot import TPOTRegressor\nfrom sklearn.datasets import load_boston\nfrom sklearn.cross_validation import train_test_split\n\ndigits = load_boston()\nX_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target,\n                                                    train_size=0.75, test_size=0.25)\n\ntpot = TPOTRegressor(generations=5, population_size=20, verbosity=2)\ntpot.fit(X_train, y_train)\nprint(tpot.score(X_test, y_test))\ntpot.export('tpot_boston_pipeline.py')\n\n\n\n\nRunning this code should discover a pipeline that achieves about 12.77 mean squared error (MSE).\n\n\nFor details on how the \nfit()\n, \nscore()\n and \nexport()\n functions work, see the \nusage documentation\n.\n\n\nAfter running the above code, the corresponding Python code should be exported to the \ntpot_boston_pipeline.py\n file and look similar to the following:\n\n\nimport numpy as np\n\nfrom sklearn.cross_validation import train_test_split\nfrom sklearn.ensemble import ExtraTreesRegressor\nfrom sklearn.pipeline import make_pipeline\n\n# NOTE: Make sure that the target is labeled 'class' in the data file\ntpot_data = np.recfromcsv('PATH/TO/DATA/FILE', sep='COLUMN_SEPARATOR', dtype=np.float64)\nfeatures = np.delete(tpot_data.view(np.float64).reshape(tpot_data.size, -1),\n                     tpot_data.dtype.names.index('class'), axis=1)\n\ntraining_features, testing_features, training_classes, testing_classes = \\\n    train_test_split(features, tpot_data['class'], random_state=42)\n\nexported_pipeline = make_pipeline(\n    ExtraTreesRegressor(max_features=0.76, n_estimators=500)\n)\n\nexported_pipeline.fit(training_features, training_classes)\nresults = exported_pipeline.predict(testing_features)",
+            "title": "Boston Example"
+        },
+        {
             "location": "/examples/Titanic_Kaggle_Example/",
             "text": "To see the TPOT applied the Titanic Kaggle dataset, see the Jupyter notebook \nhere\n.",
             "title": "Titanic Kaggle Example"

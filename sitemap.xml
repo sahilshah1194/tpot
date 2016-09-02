@@ -40,6 +40,12 @@
     </url>
         
     <url>
+     <loc>http://rhiever.github.io/tpot/examples/Boston_Example/</loc>
+     <lastmod>2016-09-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>http://rhiever.github.io/tpot/examples/Titanic_Kaggle_Example/</loc>
      <lastmod>2016-09-02</lastmod>
      <changefreq>daily</changefreq>
