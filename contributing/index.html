@@ -110,6 +110,9 @@
         
             <ul>
             
+                <li class="toctree-l3"><a href="#project-layout">Project layout</a></li>
+                
+            
                 <li class="toctree-l3"><a href="#how-to-contribute">How to contribute</a></li>
                 
             
@@ -123,6 +126,13 @@
                 
             
             </ul>
+        
+    </li>
+<li>
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../releases/">Release Notes</a>
         
     </li>
 <li>
@@ -178,6 +188,17 @@
             <div class="section">
               
                 <p>We welcome you to <a href="https://github.com/rhiever/tpot/issues/">check the existing issues</a> for bugs or enhancements to work on. If you have an idea for an extension to TPOT, please <a href="https://github.com/rhiever/tpot/issues/new">file a new issue</a> so we can discuss it.</p>
+<h2 id="project-layout">Project layout</h2>
+<p>The latest stable release of TPOT is on the <a href="https://github.com/rhiever/tpot/tree/master">master branch</a>, whereas the latest version of TPOT in development is on the <a href="https://github.com/rhiever/tpot/tree/development">development branch</a>. Make sure you are looking at and working on the correct branch if you're looking to contribute code.</p>
+<p>In terms of directory structure:</p>
+<ul>
+<li>All of TPOT's code sources are in the <code>tpot</code> directory</li>
+<li>The documentation sources are in the <code>docs</code> directory</li>
+<li>Images in the documentation are in the <code>images</code> directory</li>
+<li>Tutorials for TPOT are in the <code>tutorials</code> directory</li>
+<li>Unit tests for TPOT are in the <code>tests.py</code> file</li>
+</ul>
+<p>Make sure to familiarize yourself with the project layout before making any major contributions, and especially make sure to send all code changes to the <code>development</code> branch.</p>
 <h2 id="how-to-contribute">How to contribute</h2>
 <p>The preferred way to contribute to TPOT is to fork the 
 <a href="https://github.com/rhiever/tpot/">main repository</a> on
@@ -209,9 +230,9 @@ GitHub:</p>
 </li>
 <li>
 <p>Once some changes are saved locally, you can use your tweaked version of TPOT by navigating to the project's base directory and running TPOT directly from the command line:</p>
-<pre><code>  $ python -m tpot.tpot
+<pre><code>  $ python -m tpot.driver
 </code></pre>
-<p>or by running script that imports and uses the TPOT module with code similar to <code>from tpot import TPOT</code></p>
+<p>or by running script that imports and uses the TPOT module with code similar to <code>from tpot import TPOTClassifier</code></p>
 </li>
 <li>
 <p>To check your changes haven't broken any existing tests and to check new tests you've added pass run the following (note, you must have the <code>nose</code> package installed within your dev environment for this to work):</p>
@@ -295,7 +316,7 @@ GitHub:</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../citing/" class="btn btn-neutral float-right" title="Citing">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../releases/" class="btn btn-neutral float-right" title="Release Notes">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../examples/Titanic_Kaggle_Example/" class="btn btn-neutral" title="Titanic Kaggle Example"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -331,7 +352,7 @@ GitHub:</p>
         <span><a href="../examples/Titanic_Kaggle_Example/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
       
-        <span style="margin-left: 15px"><a href="../citing/" style="color: #fcfcfc">Next &raquo;</a></span>
+        <span style="margin-left: 15px"><a href="../releases/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
